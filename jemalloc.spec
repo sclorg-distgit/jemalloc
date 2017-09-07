@@ -3,7 +3,7 @@
 Name:           %{?scl:%scl_prefix}jemalloc
 Version:        3.6.0
 
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        General-purpose scalable concurrent malloc implementation
 
 Group:          System Environment/Libraries
@@ -19,7 +19,6 @@ Patch2:         jemalloc-armv5-force-atomic.patch
 # RHEL5/POWER has no atomic operations
 Patch3:         jemalloc-3.0.0.atomic_h_ppc_32bit_operations.patch
 Patch4:         jemalloc-3.6.0.no_explicit_altivec.patch
-Patch5:         jemalloc-3.6.0-rh-passenger40.patch
 BuildRequires:  /usr/bin/xsltproc
 %ifnarch s390
 BuildRequires:  valgrind-devel
@@ -51,7 +50,7 @@ developing applications that use %{name}.
 %endif
 %endif
 
-%patch5 -p1 -b .rh-varnish4
+sed -i '/^LIBPREFIX/s/@libprefix@/@libprefix@%{scl}/' Makefile.in
 
 %build
 %ifarch i686
@@ -83,7 +82,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{_libdir}/librh-varnish4jemalloc.so.*
+%{_libdir}/lib*jemalloc.so.*
 %{_bindir}/jemalloc.sh
 %doc COPYING README VERSION
 %doc doc/jemalloc.html
@@ -96,7 +95,7 @@ rm -rf %{buildroot}
 %files devel
 %defattr(-,root,root,-)
 %{_includedir}/jemalloc
-%{_libdir}/librh-varnish4jemalloc.so
+%{_libdir}/lib*jemalloc.so
 %{_mandir}/man3/jemalloc.3*
 
 %post -p /sbin/ldconfig
@@ -104,6 +103,9 @@ rm -rf %{buildroot}
 %postun -p /sbin/ldconfig
 
 %changelog
+* Tue Aug 22 2017 Joe Orton <jorton@redhat.com> - 3.6.0-13
+- update to be SCL agnostic
+
 * Mon Aug 17 2015 Jan Kaluza <jkaluza@redhat.com> - 3.6.0-12
 - add rh-varnish4 infix to jemalloc library (#1254034)
 
