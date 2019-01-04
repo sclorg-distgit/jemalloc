@@ -3,7 +3,7 @@
 Name:           %{?scl:%scl_prefix}jemalloc
 Version:        5.0.1
 
-Release:        3%{?dist}
+Release:        3.bs1%{?dist}
 Summary:        General-purpose scalable concurrent malloc implementation
 
 Group:          System Environment/Libraries
